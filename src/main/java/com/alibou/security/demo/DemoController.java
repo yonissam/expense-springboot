@@ -22,7 +22,7 @@ public class DemoController {
   @GetMapping("/demo-controller")
   public String sayHello() {
 
-    return "Hello from secured endpoint";
+    return "Hello from secured endpoint lion of judah";
   }
 
   @GetMapping("/users/{username}/todos/all")
