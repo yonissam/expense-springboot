@@ -27,6 +27,13 @@ dockerImage = ''
                 }
             }
         }
+        stage('Deploy') {
+                steps{
+                script{
+                                   docker.image(registry).withRun('-p 8085:8085')
+                                }
+                }
+                }
         stage('Cleaning up') {
         steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
