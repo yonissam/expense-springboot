@@ -30,7 +30,7 @@ dockerImage = ''
         stage('Deploy') {
                 steps{
                 script {
-                    sh 'docker run -d --name expense -p 8085:8085 yoniss/expense'
+                    sh 'docker run -d --name expense -p 8085:8085 yoniss/expense:5'
                 }
                 }
                 }
