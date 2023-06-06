@@ -14,7 +14,7 @@ dockerImage = ''
         stage('Build docker image'){
             steps{
                 script{
-                   dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                   dockerImage = docker.build registry
                 }
             }
         }
@@ -30,14 +30,10 @@ dockerImage = ''
         stage('Deploy') {
                 steps{
                 script {
-                    sh 'docker run -d --name expense -p 8085:8085 yoniss/expense:5'
+                    sh 'docker run -d --name expense -p 8085:8085 yoniss/expense'
                 }
                 }
                 }
-        stage('Cleaning up') {
-        steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
-        }
-        }
+
     }
 }
