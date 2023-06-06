@@ -1,4 +1,9 @@
 pipeline {
+environment {
+registry = "yoniss/expense"
+registryCredential = 'dockerhub_id'
+dockerImage = ''
+}
     agent any
     stages{
         stage('Build Maven'){
@@ -9,20 +14,23 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                   dockerImage = docker.build("yoniss/expense")
+                   dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
         stage('Push image to Hub'){
             steps{
                 script{
-                   withCredentials([string(credentialsId: 'DOCKER_HUB', variable: 'dockerhubpwd')]) {
-                   sh 'docker login -u yoniss -p ${dockerhubpwd}'
-
-}
-                   dockerImage.push()
+                   docker.withRegistry( '', registryCredential ) {
+                  dockerImage.push()
+                }
                 }
             }
+        }
+        stage('Cleaning up') {
+        steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+        }
         }
     }
 }
