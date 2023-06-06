@@ -29,9 +29,9 @@ dockerImage = ''
         }
         stage('Deploy') {
                 steps{
-                script{
-                                   docker.image('yoniss/expense').withRun('-d --name expense -p 8085:8085')
-                                }
+                script {
+                    sh 'docker run -d --name expense -p 8085:8085 yoniss/expense'
+                }
                 }
                 }
         stage('Cleaning up') {
