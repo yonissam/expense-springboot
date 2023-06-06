@@ -9,7 +9,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t yoniss/expense .'
+                   dockerImage = docker.build("yoniss/expense")
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
                    sh 'docker login -u yoniss -p ${dockerhubpwd}'
 
 }
-                   sh 'docker push yoniss/expense'
+                   dockerImage.push()
                 }
             }
         }
