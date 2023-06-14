@@ -54,7 +54,7 @@ public class AuthenticationController {
         } else {
             // Send email notification
             String subject = "Account Creation";
-            String body = "Your account has been created successfully";
+            String body = "Your account has been created successfully. Enjoy our website";
             emailService.sendSimpleEmail(request.getEmail(), body, subject);
             return ResponseEntity.ok(service.register(request));
         }
