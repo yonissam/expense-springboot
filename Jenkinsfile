@@ -1,16 +1,28 @@
 pipeline {
+environment {
+registry = "yoniss/spring-expense"
+registryCredential = 'dockerhub_id'
+dockerImage = ''
+}
     agent any
     stages{
-
-       stage('Deploy App to Kubernetes') {
-             steps {
+        stage('Build docker image'){
+            steps{
                 script{
-                 withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-                   sh 'kubectl apply -f expense-spring-deployment.yaml'
-                 }
-               }
-             }
-           }
+                   dockerImage = docker.build registry
+                }
+            }
+        }
+        stage('Push image to Hub'){
+            steps{
+                script{
+                   docker.withRegistry( '', registryCredential ) {
+                  dockerImage.push()
+                }
+                }
+            }
+        }
+
 
     }
 }
