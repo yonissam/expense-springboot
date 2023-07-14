@@ -1,40 +1,36 @@
 pipeline {
-
-  options {
-    ansiColor('xterm')
-  }
-
-  agent {
-    kubernetes {
-      yamlFile 'builder.yaml'
-    }
-  }
-
-  stages {
-
-    stage('Kaniko Build & Push Image') {
-      steps {
-        container('kaniko') {
-          script {
-            sh '''
-            /kaniko/executor --dockerfile `pwd`/Dockerfile \
-                             --context `pwd` \
-                             --destination=yoniss/expense-spring
-            '''
-          }
+environment {
+registry = "yoniss/expense-spring"
+registryCredential = 'dockerhub_id'
+dockerImage = ''
+}
+    agent any
+    stages{
+        stage('Build docker image'){
+            steps{
+                script{
+                   dockerImage = docker.build registry
+                }
+            }
         }
-      }
-    }
-
-    stage('Deploy App to Kubernetes') {
-      steps {
-        container('kubectl') {
-          withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-            sh 'kubectl apply -f expense-spring-deployment.yaml'
-          }
+        stage('Push image to Hub'){
+            steps{
+                script{
+                   docker.withRegistry( '', registryCredential ) {
+                  dockerImage.push()
+                }
+                }
+            }
         }
-      }
-    }
+       stage('Deploy App to Kubernetes') {
+             steps {
+               container('kubectl') {
+                 withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+                   sh 'kubectl apply -f expense-spring-deployment.yaml'
+                 }
+               }
+             }
+           }
 
-  }
+    }
 }
