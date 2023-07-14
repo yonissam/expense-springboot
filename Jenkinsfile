@@ -19,7 +19,7 @@ pipeline {
             sh '''
             /kaniko/executor --dockerfile `pwd`/Dockerfile \
                              --context `pwd` \
-                             --destination=yoniss/expense
+                             --destination=yoniss/expense-spring
             '''
           }
         }
@@ -30,7 +30,6 @@ pipeline {
       steps {
         container('kubectl') {
           withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-            sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" expense-spring-deployment.yaml'
             sh 'kubectl apply -f expense-spring-deployment.yaml'
           }
         }
