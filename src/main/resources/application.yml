@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.0.105:5432/expense_app
+    url: jdbc:postgresql://192.168.0.139:5432/expense_app
     username: postgres
     password: YoniGeo2024!
     driver-class-name: org.postgresql.Driver
@@ -21,7 +21,7 @@ spring:
           starttls:
             enable: 'false'
           auth: 'false'
-    host: 192.168.0.105
+    host: 192.168.0.139
     username:
     password:
     port: '2525'

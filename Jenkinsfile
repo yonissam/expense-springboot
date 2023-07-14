@@ -1,39 +1,41 @@
 pipeline {
-environment {
-registry = "yoniss/expense"
-registryCredential = 'dockerhub_id'
-dockerImage = ''
-}
-    agent any
-    stages{
-        stage('Build Maven'){
-            steps{
-                sh 'mvn clean install'
-            }
-        }
-        stage('Build docker image'){
-            steps{
-                script{
-                   dockerImage = docker.build registry
-                }
-            }
-        }
-        stage('Push image to Hub'){
-            steps{
-                script{
-                   docker.withRegistry( '', registryCredential ) {
-                  dockerImage.push()
-                }
-                }
-            }
-        }
-        stage('Deploy') {
-                steps{
-                script {
-                    sh 'docker run -d --name expense -p 8085:8085 yoniss/expense'
-                }
-                }
-                }
 
+  options {
+    ansiColor('xterm')
+  }
+
+  agent {
+    kubernetes {
+      yamlFile 'builder.yaml'
     }
+  }
+
+  stages {
+
+    stage('Kaniko Build & Push Image') {
+      steps {
+        container('kaniko') {
+          script {
+            sh '''
+            /kaniko/executor --dockerfile `pwd`/Dockerfile \
+                             --context `pwd` \
+                             --destination=yoniss/expense
+            '''
+          }
+        }
+      }
+    }
+
+    stage('Deploy App to Kubernetes') {
+      steps {
+        container('kubectl') {
+          withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+            sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" expense-spring-deployment.yaml'
+            sh 'kubectl apply -f expense-spring-deployment.yaml'
+          }
+        }
+      }
+    }
+
+  }
 }

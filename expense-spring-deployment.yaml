@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: expense-spring
+  name: expense-spring
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: expense-spring
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: expense-spring
+    spec:
+      containers:
+        - image: yoniss/expense
+          name: expense-spring
+          resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: expense-spring
+  name: expense-spring
+spec:
+  ports:
+    - name: "http"
+      port: 8085
+      targetPort: 8085
+  selector:
+    app: expense-spring
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+
