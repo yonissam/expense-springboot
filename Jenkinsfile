@@ -1,11 +1,8 @@
 pipeline {
-environment {
-
-}
     agent any
     stages{
 
-        
+
        stage('Deploy App to Kubernetes') {
              steps {
                container('kubectl') {
