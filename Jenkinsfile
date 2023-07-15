@@ -1,6 +1,9 @@
 pipeline {
 environment {
 registry = "yoniss/spring-expense"
+DOCKERHUB_USERNAME = "yoniss"
+APP_NAME = "spring-expense"
+IMAGE_TAG = "${DOCKERHUB_USERNAME}" + "/" + "${APP_NAME}"
 registryCredential = 'dockerhub_id'
 dockerImage = ''
 }
@@ -44,13 +47,19 @@ dockerImage = ''
             }
         }
 
-        stage('Deploy to Kubernetes') {
-              steps {
-                withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://192.168.0.38:6443']) {
-                  sh 'kubectl apply -f expense-spring-deployment.yaml'
-                }
-              }
-            }
+        stage('Updating kubernetes deployment file') {
+        steps{
+        script {
+                sh """
+                cat expense-spring-deployment.yaml
+                sed -i  's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' expense-spring-deployment.yaml
+                cat expense-spring-deployment.yaml
+                """
+        }
+        }
+        }
+
+ 
 
 
     }
