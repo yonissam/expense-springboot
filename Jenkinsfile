@@ -51,9 +51,9 @@ dockerImage = ''
         steps{
         script {
                 sh """
-                cat expense-spring-deployment.yaml
-                sed -i  's/${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}/g' expense-spring-deployment.yaml
-                cat expense-spring-deployment.yaml
+                cat expense-spring-deployment.yaml | grep spec.template.spec.containers.image
+                sed -i  's|${APP_NAME}.*/${APP_NAME}:${IMAGE_TAG}|g' expense-spring-deployment.yaml
+                cat expense-spring-deployment.yaml | grep spec.template.spec.containers.image
                 """
         }
         }
