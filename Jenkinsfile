@@ -47,19 +47,22 @@ dockerImage = ''
             }
         }
 
-        stage('Updating kubernetes deployment file') {
+        stage('Delete Docker Images') {
         steps{
-        script {
-                sh """
-                cat expense-spring-deployment.yaml | grep image
-                sed -i  's|image: .*|image: ${IMAGE_NAME}:${IMAGE_TAG}|' expense-spring-deployment.yaml
-                cat expense-spring-deployment.yaml | grep image
-                """
-        }
+          script{
+                sh 'docker rmi ${IMAGE_NAME}:${IMAGE_TAG}'
+                sh 'docker rmi ${IMAGE_NAME}:latest'
+          }
         }
         }
 
-
+        stage('Trigger config change pipeline'){
+           steps{
+               script{
+                    sh "curl -v -k -user yoniss:11e412282a1e81b0df1ac8f9701dff5ddb -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -data 'IMAGE_TAG=${IMAGE_TAG}' 'http://192.168.0.139:8080/job/expense-spring-argo/buildWithParameters?token=gitops-config'"
+               }
+           }
+        }
 
 
     }
