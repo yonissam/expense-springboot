@@ -59,7 +59,7 @@ dockerImage = ''
         stage('Trigger config change pipeline'){
            steps{
                script{
-                    sh "curl -v -k -user yoniss:11e412282a1e81b0df1ac8f9701dff5ddb -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -data 'IMAGE_TAG:${IMAGE_TAG}' 'http://192.168.0.139:8080/job/expense-spring-argo/buildWithParameters?token=gitops-config'"
+                    sh "curl -v -k -user yoniss:YoniGeo2024! -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -data 'IMAGE_TAG:${IMAGE_TAG}' 'http://192.168.0.139:8080/job/expense-spring-argo/buildWithParameters?token=gitops-config'"
                }
            }
         }
