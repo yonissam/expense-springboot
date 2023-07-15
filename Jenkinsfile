@@ -14,13 +14,13 @@ dockerImage = ''
                 }
             }
 
-             stage('UNIT TEST'){
+             stage('Unit Test'){
                         steps {
                             sh 'mvn test'
                         }
                     }
 
-                    stage('INTEGRATION TEST'){
+                    stage('Integration Test'){
                                 steps {
                                     sh 'mvn verify -DskipUnitTests'
                                 }
