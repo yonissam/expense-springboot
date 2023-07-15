@@ -50,9 +50,9 @@ dockerImage = ''
         stage('Updating kubernetes deployment file') {
         steps{
         script {
-                sh """#!/bin/bash
+                sh """
                 cat expense-spring-deployment.yaml | grep image
-                sed -i  's|${APP_NAME}.*|${APP_NAME}:${IMAGE_TAG}|' expense-spring-deployment.yaml
+                sed -i  's|image: .*|image: ${IMAGE_NAME}:${IMAGE_TAG}|' expense-spring-deployment.yaml
                 cat expense-spring-deployment.yaml | grep image
                 """
         }
