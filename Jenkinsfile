@@ -9,14 +9,27 @@ dockerImage = ''
     stage('Build maven'){
                 steps{
                     script{
-                       sh 'mvn clean install'
+                       sh 'mvn clean install -DskipTests'
                     }
                 }
             }
+
+             stage('UNIT TEST'){
+                        steps {
+                            sh 'mvn test'
+                        }
+                    }
+
+                    stage('INTEGRATION TEST'){
+                                steps {
+                                    sh 'mvn verify -DskipUnitTests'
+                                }
+                            }
+
         stage('Build docker image'){
             steps{
                 script{
-                   dockerImage = docker.build registry
+                   dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
@@ -24,11 +37,20 @@ dockerImage = ''
             steps{
                 script{
                    docker.withRegistry( '', registryCredential ) {
-                  dockerImage.push()
+                  dockerImage.push("$BUILD_NUMBER")
+                  dockerImage.push('latest')
                 }
                 }
             }
         }
+
+        stage('Deploy to Kubernetes') {
+              steps {
+                withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://192.168.0.38:6443']) {
+                  sh 'kubectl apply -f expense-spring-deployment.yaml'
+                }
+              }
+            }
 
 
     }
