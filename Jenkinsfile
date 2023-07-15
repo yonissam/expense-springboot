@@ -1,9 +1,9 @@
 pipeline {
 environment {
-registry = "yoniss/spring-expense"
 DOCKERHUB_USERNAME = "yoniss"
 APP_NAME = "spring-expense"
-IMAGE_TAG = "${DOCKERHUB_USERNAME}" + "/" + "${APP_NAME}"
+IMAGE_TAG = "${BUILD_NUMBER}"
+IMAGE_NAME = "${DOCKERHUB_USERNAME}" + "/" + "${APP_NAME}"
 registryCredential = 'dockerhub_id'
 dockerImage = ''
 }
@@ -32,7 +32,7 @@ dockerImage = ''
         stage('Build docker image'){
             steps{
                 script{
-                   dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                   dockerImage = docker.build "${IMAGE_NAME}"
                 }
             }
         }
@@ -59,7 +59,7 @@ dockerImage = ''
         }
         }
 
- 
+
 
 
     }

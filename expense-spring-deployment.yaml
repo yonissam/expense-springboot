@@ -16,7 +16,7 @@ spec:
         app: expense-spring
     spec:
       containers:
-        - image: yoniss/expense-spring
+        - image: yoniss/expense-spring:v1
           name: expense-spring
           resources: {}
 status: {}
