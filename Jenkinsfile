@@ -23,7 +23,7 @@ dockerImage = ''
                         }
                     }
 
-                    stage('Integration Test'){
+                    stage('Integration Test Maven'){
                                 steps {
                                     sh 'mvn verify -DskipUnitTests'
                                 }
