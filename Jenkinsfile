@@ -36,7 +36,7 @@ dockerImage = ''
                 }
             }
         }
-        stage('Push image to Docker Hub'){
+        stage('Push image to Docker Hub Registry'){
             steps{
                 script{
                    docker.withRegistry( '', registryCredential ) {
