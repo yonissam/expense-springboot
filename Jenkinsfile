@@ -47,7 +47,7 @@ dockerImage = ''
             }
         }
 
-        stage('Delete Docker Images') {
+        stage('Delete Docker Images from local repo') {
         steps{
           script{
                 sh 'docker rmi ${IMAGE_NAME}:${IMAGE_TAG}'
