@@ -17,7 +17,7 @@ dockerImage = ''
                 }
             }
 
-             stage('Unit Test'){
+             stage('Unit Test Maven'){
                         steps {
                             sh 'mvn test'
                         }
