@@ -74,7 +74,7 @@ dockerImage = ''
         }
         }
 
-        stage('Trigger config change pipeline to jenkins'){
+        stage('Trigger jenkins YAML update pipeline'){
            steps{
                script{
                     sh "curl -v -k --user yoniss:11dee7cae1810803b7e2aa51d53ed660c1 -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'http://192.168.0.139:8080/job/expense-spring-argo/buildWithParameters?token=gitops-config'"
