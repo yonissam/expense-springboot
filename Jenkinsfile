@@ -54,7 +54,7 @@ dockerImage = ''
                 }
             }
         }
-        stage('Push image to Docker Hub Registry'){
+        stage('Push Image to Docker Hub Registry'){
             steps{
                 script{
                    docker.withRegistry( '', registryCredential ) {
@@ -65,7 +65,7 @@ dockerImage = ''
             }
         }
 
-        stage('Delete Docker Images from local docker repo') {
+        stage('Delete Docker Images from Local Docker Repo') {
         steps{
           script{
                 sh 'docker rmi ${IMAGE_NAME}:${IMAGE_TAG}'
@@ -74,7 +74,7 @@ dockerImage = ''
         }
         }
 
-        stage('Trigger jenkins YAML update pipeline'){
+        stage('Trigger Jenkins YAML Update Pipeline'){
            steps{
                script{
                     sh "curl -v -k --user yoniss:11dee7cae1810803b7e2aa51d53ed660c1 -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'http://192.168.0.139:8080/job/expense-spring-argo/buildWithParameters?token=gitops-config'"
