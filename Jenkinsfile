@@ -9,7 +9,7 @@ dockerImage = ''
 }
     agent any
     stages{
-    stage('Build maven'){
+    stage('Clean Install Maven'){
                 steps{
                     script{
                        sh 'mvn clean install -DskipTests'
