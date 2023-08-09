@@ -30,4 +30,17 @@ jobs:
     - name: Build with Maven
       run: mvn -B package -DskipTests --file pom.xml
 
+  docker:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build and Push Docker image
+      uses: mr-smithers-excellent.docker-build-push@v4
+      with:
+        image: yoniss/git-spring
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
 
